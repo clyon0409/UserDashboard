@@ -25,6 +25,16 @@ class Blogger extends CI_Model {
 		return $this->db->query($query, $values);
 	}
 
+	function get_all_data_for_a_blog($blog_id)
+	{
+		$query = 'SELECT users.first_name as poster_first, users.last_name as poster_last, posts.content, posts.created_at as post_date
+				  FROM users
+				  JOIN posts on posts.users_id=users.id
+				  WHERE blogs_id = ?';
+
+		return $this->db->query($query, array($blog_id))->result_array();
+	}
+
 	function create_blog()
 	{
 		$query = 'INSERT INTO blogs (created_at) VALUES (?)';

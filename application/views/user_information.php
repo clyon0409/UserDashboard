@@ -23,7 +23,7 @@
   </head>
   <body>
   	<div class="container">
-
+<?php var_dump($user); ?>
   		<!-- ************* Navigation Bar *************  -->
 	      <nav class="navbar navbar-default">
 	              <!-- Brand and toggle get grouped for better mobile display -->
@@ -50,52 +50,56 @@
 
        <!-- ************* Main Content *************  -->
        	<div class="blog-header">
-       		<h2 class="blog-title">Michael Choi</h2>
+       		<h2 class="blog-title"><?= $user['first_name'].' '.$user['last_name'] ?></h2>
        		<div class="row">
 				  <div class="col-md-2"><p>Registered at:</p></div>
-				  <div class="col-md-2"><p>December 24th 2012</p></div>
+				  <div class="col-md-2"><p><?= date('F jS Y', strtotime($user['registered_at'])) ?></p></div>
 				  <div class="col-md-8"></div>
 			</div>
         
         	<div class="row">
 				  <div class="col-md-2"><p>User ID:</p></div>
-				  <div class="col-md-2"><p>#1</p></div>
+				  <div class="col-md-2"><p><?= $user['id'] ?></p></div>
 				  <div class="col-md-8"></div>
 			</div>
 
 			<div class="row">
 				  <div class="col-md-2"><p>Email Address</p></div>
-				  <div class="col-md-2"><p>michael@village88.com</p></div>
+				  <div class="col-md-2"><p><?= $user['email'] ?></p></div>
 				  <div class="col-md-8"></div>
 			</div>
         
         	<div class="row">
 				  <div class="col-md-2"><p>Description:</p></div>
-				  <div class="col-md-2"><p>I am happy to be here!</p></div>
+				  <div class="col-md-2"><p><?= $user['description'] ?></p></div>
 				  <div class="col-md-8"></div>
 			</div>
       	</div>
 
       <div class="row">
           <div class="col-md-12 blog-main">
-          	<h2 class="blog-title">Leave a message for Michael</h2>
+          	<h2 class="blog-title">Leave a message for <?= $user['first_name'] ?></h2>
   			    <textarea class="form-control" rows="3"></textarea>
-            </div>
+          </div>
+      </div>
 			
 			<div class="row">
 				  <div class="col-md-11"></div>
 				  <div class="col-md-1">
 				  	<p><button type="button" class="btn btn-success  btn-default">Post</button></p>
 				  </div>
-			</div>
-			
-          <div class="blog-post">
-            <div class="row">
-                <div class="col-md-2"><h4 class="blog-post-meta"><a href="#">Mark</a></h4></div>
-                <div class="col-md-8"></div>
-                <div class="col-md-2"><p class="blog-post-meta">January 1, 2014 by</p></div>
-            </div>
-            <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>
+
+<?php   foreach ($user['posts'] as $post)
+        {
+           echo '<div class="blog-post">';
+           echo '<div class="row">';
+                  echo '<div class="col-md-2"><h4 class="blog-post-meta"><a href="#">'.$post['poster_first'].' '.$post['poster_last'].'</a></h4></div>';
+                  echo '<div class="col-md-8"></div>';
+                  echo '<div class="col-md-2"><p class="blog-post-meta"><p>'.date('F jS Y', strtotime($post['post_date'])).'</p></div>';
+             echo '</div>';
+             echo '<p>'.$post['content'].'</p>';
+        }
+?>
             <hr>
             
             <div class="row">

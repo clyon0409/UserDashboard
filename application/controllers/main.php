@@ -123,18 +123,22 @@ class Main extends CI_Controller {
 
 	private function save_user_info_redirect($user)
 	{
-		$temp['user_info']=array('id'=>$user['id'], 
-								'first_name'=>$user['first_name'],
-								'access_level' =>$user['access_level'],
-								'blog_id' =>$user['blogs_id']);
+		$data['user']=array('id'=>$user['id'], 
+							'first_name'=>$user['first_name'],
+							'access_level' =>$user['access_level'],
+							'blog_id' =>$user['blogs_id']);
 
-		$this->session->set_userdata('user', $temp);
+		
+		$this->session->set_userdata('user', $user['id']);
+		$this->session->set_userdata('blog_id', $user['blogs_id']);
 
-		$temp['user_info']['last_name'] = $user['last_name'];
-		$temp['user_info']['email'] = $user['email'];
-		$temp['user_info']['registered_at'] = $user['created_at'];
+		$data['user']['last_name'] = $user['last_name'];
+		$data['user']['email'] = $user['email'];
+		$data['user']['description'] = $user['description'];
+		$data['user']['registered_at'] = $user['created_at'];
+		$data['user']['posts'] = $this->Blogger->get_all_data_for_a_blog($user['blogs_id']);
 
-		$this->load->view('user_information', $temp);
+		$this->load->view('user_information', $data);
 
 	}
 
