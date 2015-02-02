@@ -33,10 +33,19 @@ class Main extends CI_Controller {
 		if($this->input->post('action') == 'login')
 		{ 
 			$this->set_rules('login');
+			
+			if($this->form_validation->run() == FALSE)
+			{
+				//echo 'form validation returned false';
+				//var_dump(validation_errors());
+				$this->session->set_flashdata('errors',validation_errors());
+				redirect('/main/Sign_in');
+			}
+
 			$user = $this->Blogger->get_user_by_email($this->input->post('email'));
-		
 			if(!empty($user))
 			{
+
 				if($this->input->post('password') == $user['password'])
 				{
 					$temp['user_info']=array('id'=>$user['id'], 
@@ -55,13 +64,13 @@ class Main extends CI_Controller {
 				else
 				{
 					$this->session->set_flashdata('errors', 'You entered an invalid password');
-					redirect('sign_in');
+					redirect('Sign_in');
 				}
 			}
 			else
 			{
 				$this->session->set_flashdata('errors', 'Could not find email address');
-				redirect('sign_in');
+				redirect('Sign_in');
 			}
 		}
 
