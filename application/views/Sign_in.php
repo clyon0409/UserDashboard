@@ -28,6 +28,12 @@
 
   <body>
       <div class="container">
+<?php
+          if($this->session->flashdata('errors') != NULL)
+          {
+            echo $this->session->flashdata('errors');
+          }
+?>
           <!-- ********* Navigation Bar *************  --->
           <nav class="navbar navbar-default">
                 <!-- Brand and toggle get grouped for better mobile display -->

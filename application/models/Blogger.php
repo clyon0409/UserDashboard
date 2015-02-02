@@ -6,9 +6,10 @@ class Blogger extends CI_Model {
 	return $this->db->query("SELECT * FROM users")->result_array();
 	}
 
-	function get_course_by_id($course_id)
+	function get_user_by_email($email)
 	{
-		return $this->db->query('SELECT * FROM courses WHERE id = ?', array($course_id))->row_array();
+		$query = 'SELECT users.*, access.* FROM users JOIN access ON access.users_id = users.id WHERE email = ?';
+		return $this->db->query($query, array($email))->row_array();
 	}
 
 	function add_course($course)
