@@ -48,41 +48,94 @@ class Main extends CI_Controller {
 
 				if($this->input->post('password') == $user['password'])
 				{
-					$temp['user_info']=array('id'=>$user['id'], 
-								'first_name'=>$user['first_name'],
-								'access_level' =>$user['access_level'],
-								'blog_id' =>$user['blogs_id']);
 
-					$this->session->set_userdata('user', $temp);
-
-					$temp['user_info']['last_name'] = $user['last_name'];
-					$temp['user_info']['email'] = $user['email'];
-					$temp['user_info']['registered_at'] = $user['created_at'];
-
-					$this->load->view('user_information');
+					$this->save_user_info_redirect($user);
 				}
 				else
 				{
 					$this->session->set_flashdata('errors', 'You entered an invalid password');
-					redirect('Sign_in');
+					redirect('/main/Sign_in');
 				}
 			}
 			else
 			{
-				$this->session->set_flashdata('errors', 'Could not find email address');
-				redirect('Sign_in');
+				$this->session->set_flashdata('errors', 'Account does not exist for email address');
+				redirect('/main/Sign_in');
 			}
 		}
 
 		if($this->input->post('action')  == 'register')
 		{
-			echo 'process register';
+			//echo 'process register';
+			$this->set_rules('register');
+
+			if($this->form_validation->run() == FALSE)
+			{
+				//echo 'form validation returned false';
+				//var_dump(validation_errors());die();
+				$this->session->set_flashdata('errors',validation_errors());
+				redirect('/main/register');
+			}
+			else
+			{
+				$user['first_name'] = $this->input->post('first_name');
+				$user['last_name'] = $this->input->post('last_name');
+				$user['email'] = $this->input->post('email');
+				$user['password'] = $this->input->post('password');
+
+				$result = $this->Blogger->add_user($user);
+
+				if ($result)
+				{
+					$new_user = $this->Blogger->get_user_id($user['email']);
+				}else{
+					$this->session->set_flashdata('errors', 'Unable to add new user');
+					redirect('/main/register');
+				}
+
+				$blog = $this->Blogger->create_blog();
+				 
+				if ($blog != 0)
+				{
+					$res = $this->Blogger->connect_blog_to_user($new_user['id'], $blog['id']);
+					if (!$res)
+					{
+						$this->session->set_flashdata('errors', 'Unable to connect blog to user');
+						redirect('/main/register');
+					}
+
+				}else{
+					$this->session->set_flashdata('errors', 'Unable to create blog for user');
+					redirect('/main/register');
+				}
+
+				$new_user['access_level'] = 'normal';
+				$new_user['blogs_id'] = $blog['id'];
+				$this->save_user_info_redirect($new_user);
+			}
 		}
 	}
 
 	public function register()
 	{
 		$this->load->view('register');
+	}
+
+	private function save_user_info_redirect($user)
+	{
+		$temp['user_info']=array('id'=>$user['id'], 
+								'first_name'=>$user['first_name'],
+								'access_level' =>$user['access_level'],
+								'blog_id' =>$user['blogs_id']);
+
+		$this->session->set_userdata('user', $temp);
+
+		$temp['user_info']['last_name'] = $user['last_name'];
+		$temp['user_info']['email'] = $user['email'];
+		$temp['user_info']['registered_at'] = $user['created_at'];
+
+		$this->load->view('user_information', $temp);
+
 	}
 
 	private function set_rules($action)

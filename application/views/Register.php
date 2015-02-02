@@ -46,30 +46,39 @@
               </div><!-- /.navbar-collapse -->
       </nav>
 
-       <!-- ************* Registration Form *************  -->
+       <!-- ********* Display Errors ********** -->
+<?php
+          if($this->session->flashdata('errors') != NULL)
+          {
+            echo '<h4 class="text-danger text-center"><bold>'.$this->session->flashdata('errors').'</bold></h4>';
+          }
+?>       
+
+      <!-- ************* Registration Form *************  -->
+      
       <div class="row">
         <div class="col-md-3 col-md-offset-3">
             <h3>Register</h3>
             <form action='/main/login_or_register' method='post'>
                 <div class="form-group">
                   <label for="email">Email address</label>
-                  <input type="email" class="form-control" id="email" placeholder="Enter email">
+                  <input type="email" class="form-control" id="email" name='email' placeholder="Enter email">
                 </div>
                 <div class="form-group">
                   <label for="fName">First Name</label>
-                  <input type="text" class="form-control" id="fName" placeholder="Enter first name">
+                  <input type="text" class="form-control" id="fName" name='first_name' placeholder="Enter first name">
                 </div>
                  <div class="form-group">
                   <label for="lName">Last Name</label>
-                  <input type="text" class="form-control" id="lName" placeholder="Enter last name">
+                  <input type="text" class="form-control" id="lName"  name='last_name' placeholder="Enter last name">
                 </div>
                 <div class="form-group">
                   <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                  <input type="password" class="form-control" id="exampleInputPassword1" name='password' placeholder="Password">
                 </div>
                 <div class="form-group">
                   <label for="confirmPassword">Confirm Password</label>
-                  <input type="password" class="form-control" id="confirmPassword" placeholder="Password">
+                  <input type="password" class="form-control" id="confirmPassword"  name='confirm_password' placeholder="Password">
                 </div>
                 <div class="row">
                     <div class="col-xs-8 col-sm-7"></div>

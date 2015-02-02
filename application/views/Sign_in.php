@@ -28,12 +28,6 @@
 
   <body>
       <div class="container">
-<?php
-          if($this->session->flashdata('errors') != NULL)
-          {
-            echo '<h4 class="text-danger text-center"><bold>'.$this->session->flashdata('errors').'</bold></h4>';
-          }
-?>
           <nav class="navbar navbar-default">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -56,6 +50,13 @@
                 </div><!-- /.navbar-collapse -->
             </nav>
 
+            <!-- ********* Display Errors ********** -->
+<?php
+          if($this->session->flashdata('errors') != NULL)
+          {
+            echo '<h4 class="text-danger text-center"><bold>'.$this->session->flashdata('errors').'</bold></h4>';
+          }
+?>
             <!-- ********* Sign In Form ********** -->
             <div class="row">
               <div class="col-md-3 col-md-offset-3">
