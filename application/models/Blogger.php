@@ -100,6 +100,27 @@ class Blogger extends CI_Model {
 		return $this->db->query($query, $values);
 	}
 
+	function update_description($data)
+	{
+		$update = array('description' => $data['description']);
+		$this->db->where('id', $this->session->userdata('user'));
+		$this->db->update('users', $update); 
+	}
+
+	function update_password($data)
+	{
+		$update = array('password' => $data['password']);
+		$this->db->where('id', $this->session->userdata('user'));
+		$this->db->update('users', $update); 
+	}
+
+	function update_field($table, $key, $data)
+	{
+		$update = array($key => $data);
+		$this->db->where('id', $this->session->userdata('user'));
+		$this->db->update($table, $update); 
+	}
+
 	function delete_course($id)
 	{
 		$this->db->delete('courses',array('id'=>$id));

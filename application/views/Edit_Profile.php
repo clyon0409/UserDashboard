@@ -49,7 +49,12 @@
                   </ul>
                 </div><!-- /.navbar-collapse -->
         </nav>
-
+<?php
+          if($this->session->flashdata('errors') != NULL)
+          {
+            echo '<h4 class="text-danger text-center"><bold>'.$this->session->flashdata('errors').'</bold></h4>';
+          }
+?>
        <!-- ************* Form *************  -->
         <div class="row">
               <div class="col-md-3">
@@ -71,11 +76,11 @@
                             </div>
                             <div class="form-group">
                               <label for="fName">First Name</label>
-                              <input type="text" class="form-control" id="fName" placeholder="<?= $user['first_name'] ?>">
+                              <input type="text" class="form-control" id="fName" name='first_name' placeholder="<?= $user['first_name'] ?>">
                             </div>
                             <div class="form-group">
                               <label for="lName">Last Name</label>
-                              <input type="text" class="form-control" id="lName" placeholder="<?= $user['last_name'] ?>">
+                              <input type="text" class="form-control" id="lName" name='last_name'placeholder="<?= $user['last_name'] ?>">
                             </div>
                             <div class="row">
                                   <div class="col-xs-8 col-sm-10"></div>
@@ -89,14 +94,14 @@
               <div class="col-md-6">
                 <fieldset>
                     <legend>Change Password</legend>
-                        <form action='/users/update_password'>
+                        <form action='/users/update_password' method='post'>
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Password</label>
-                                <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                                <input type="password" class="form-control" id="exampleInputPassword1" name='password' placeholder="Password">
                             </div>
                             <div class="form-group">
                                 <label for="confirmPassword">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirmPassword" placeholder="Password">
+                                <input type="password" class="form-control" id="confirmPassword" name='confirm_password' placeholder="Password">
                             </div>
                             <div class="row">
                                   <div class="col-xs-8 col-sm-9"></div>
@@ -111,12 +116,12 @@
                 <form action='/users/update_description' method='post'>
                   <fieldset>
                     <legend>Edit Description</legend>
-                    <textarea class="form-control" rows="3"></textarea>
+                    <textarea class="form-control" rows="3" name='description' placeholder="<?= $user['description'] ?>"></textarea>
                     <h3></h3>
                     <div class="row">
                         <div class="col-xs-8 col-sm-11"></div>
                         <div class="col-xs-4 col-sm-1">
-                            <p><button type="submit" class="btn btn-success btn-default" name='action' value='save' placeholder="<?= $user['description'] ?>">Save</button></p>
+                            <p><button type="submit" class="btn btn-success btn-default" name='action' value='save'>Save</button></p>
                         </div>
                     </div>
                   </fieldset>
