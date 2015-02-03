@@ -23,7 +23,7 @@
   </head>
   <body>
   	<div class="container">
-<?php var_dump($user); ?>
+<?php //var_dump($user); ?>
   		<!-- ************* Navigation Bar *************  -->
 	      <nav class="navbar navbar-default">
 	              <!-- Brand and toggle get grouped for better mobile display -->
@@ -39,14 +39,22 @@
 	              <!-- Collect the nav links, forms, and other content for toggling -->
 	              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	                <ul class="nav navbar-nav">
-	                  <li><a href="#">Dashboard</a></li>
-	                  <li><a href="#">Profile</a></li>
+	                  <li><a href="/main/go_to_dashboard">Dashboard</a></li>
+	                  <li><a href="/main/edit_profile">Profile</a></li>
 	                </ul>
 	                <ul class="nav navbar-nav navbar-right">
-	                  <li><a href="#">Log off</a></li>
+	                  <li><a href="/main/index">Log off</a></li>
 	                </ul>
 	              </div><!-- /.navbar-collapse -->
 	      </nav>
+
+            <!-- ********* Display Errors ********** -->
+<?php
+          if($this->session->flashdata('errors') != NULL)
+          {
+            echo '<h4 class="text-danger text-center"><bold>'.$this->session->flashdata('errors').'</bold></h4>';
+          }
+?>       
 
        <!-- ************* Main Content *************  -->
        	<div class="blog-header">
@@ -57,7 +65,7 @@
 				  <div class="col-md-8"></div>
 			</div>
         
-        	<div class="row">
+      <div class="row">
 				  <div class="col-md-2"><p>User ID:</p></div>
 				  <div class="col-md-2"><p><?= $user['id'] ?></p></div>
 				  <div class="col-md-8"></div>
@@ -75,20 +83,21 @@
 				  <div class="col-md-8"></div>
 			</div>
       	</div>
-
-      <div class="row">
-          <div class="col-md-12 blog-main">
-          	<h2 class="blog-title">Leave a message for <?= $user['first_name'] ?></h2>
-  			    <textarea class="form-control" rows="3"></textarea>
+      <form action='/main/put_post' method='post'>
+          <div class="row">
+              <div class="col-md-12 blog-main">
+              	<h2 class="blog-title">Leave a message for <?= $user['first_name'] ?></h2>
+      			    <textarea class="form-control" rows="3" name='post'></textarea>
+              </div>
           </div>
-      </div>
-			
-			<div class="row">
-				  <div class="col-md-11"></div>
-				  <div class="col-md-1">
-				  	<p><button type="button" class="btn btn-success  btn-default">Post</button></p>
-				  </div>
-
+    			
+    			<div class="row">
+    				  <div class="col-md-11"></div>
+    				  <div class="col-md-1">
+    				  	<p><button type='submit' class="btn btn-success  btn-default" name='action' value='add-post'>Post</button></p>
+    				  </div>
+          </div>
+      </form>
 <?php   foreach ($user['posts'] as $post)
         {
            echo '<div class="blog-post">';

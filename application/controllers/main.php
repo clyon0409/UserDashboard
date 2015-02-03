@@ -26,6 +26,23 @@ class Main extends CI_Controller {
 		redirect(base_url());
 	}
 
+	public function edit_profile()
+	{
+		$data['user'] =$this->Blogger->get_user_by_id($this->session->userdata('user'));
+	
+		$this->load->view('edit_profile', $data);
+	}
+
+	public function go_to_dashboard()
+	{
+		if($this->session->userdata('access_level') == 'admin'){
+			$this->load->view('admin_dashboard');
+		}else{
+			echo'go to user dashboard';
+		}
+
+	}
+
 	public function login_or_register()
 	{
 		$this->load->library('form_validation');
@@ -104,15 +121,27 @@ class Main extends CI_Controller {
 						redirect('/main/register');
 					}
 
-				}else{
-					$this->session->set_flashdata('errors', 'Unable to create blog for user');
-					redirect('/main/register');
 				}
 
 				$new_user['access_level'] = 'normal';
 				$new_user['blogs_id'] = $blog['id'];
 				$this->save_user_info_redirect($new_user);
 			}
+		}
+	}
+
+	public function put_post()
+	{
+		$result= $this->Blogger->insert_post($this->input->post());
+		if ($result)
+		{
+			$data['user']=$this->Blogger->get_all_data_for_a_user();
+			$this->load->view('user_information', $data);
+		}
+		else
+		{
+			$this->session->set_flashdata('errors','Unable to put your post on user wall');
+			redirect('/main/user_information');
 		}
 	}
 
@@ -131,12 +160,15 @@ class Main extends CI_Controller {
 		
 		$this->session->set_userdata('user', $user['id']);
 		$this->session->set_userdata('blog_id', $user['blogs_id']);
+		$this->session->set_userdata('access_level', $user['access_level']);
 
 		$data['user']['last_name'] = $user['last_name'];
 		$data['user']['email'] = $user['email'];
 		$data['user']['description'] = $user['description'];
 		$data['user']['registered_at'] = $user['created_at'];
 		$data['user']['posts'] = $this->Blogger->get_all_data_for_a_blog($user['blogs_id']);
+
+		//to do: handle comments
 
 		$this->load->view('user_information', $data);
 

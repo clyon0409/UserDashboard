@@ -47,7 +47,7 @@
           <div class="jumbotron">
               <h1>Welcome to the Test</h1>
               <p>We're going to build a cool application using MVC framework! This application was built with the Village88 folks!</p>
-              <p><a class="btn btn-primary btn-lg" href="/main/sign_in" role="button">Start</a></p>
+              <p><a class="btn btn-primary btn-lg" href="/main/register" role="button">Start</a></p>
           </div>
           <div class="row">
             <div class="col-md-4">
