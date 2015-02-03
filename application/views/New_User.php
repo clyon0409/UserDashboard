@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Dashboard</title>
+    <title>New User</title>
 
     <!-- Bootstrap -->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
@@ -39,64 +39,52 @@
 	              <!-- Collect the nav links, forms, and other content for toggling -->
 	              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	                <ul class="nav navbar-nav">
-	                  <li><a href="/users/go_to_dashboard">Dashboard</a></li>
-	                  <li><a href="/users/edit_profile">Profile</a></li>
+	                  <li><a href="#">Dashboard</a></li>
+	                  <li><a href="#">Profile</a></li>
 	                </ul>
 	                <ul class="nav navbar-nav navbar-right">
-	                  <li><a href="/main/index">Log off</a></li>
+	                  <li><a href="#">Log off</a></li>
 	                </ul>
 	              </div><!-- /.navbar-collapse -->
 	      </nav>
 
-       <!-- ************* Admin Table *************  -->
-		<div class="row">
-	        <div class="col-md-3">
-				<p>Manage Users</p>
-	        </div>
-	        <div class="col-md-8"></div>
-	        <div class="col-md-1">
-	        	<p><a type="button" class="btn btn-primary btn-sm" href='/users/add_user'>Add New</a></p>
-	        </div>
-	    </div>
-	    <div class="row">
-			  <div class="col-md-6"></div>
-			  <div class="col-md-6"></div>
-		</div>
-		<div class="row">
-	        <div class="col-md-12">
-		        <table class="table table-bordered">
-		 			<thead>
-		 				<tr>
-			 				<th>ID</th>
-			 				<th>Name</th>
-			 				<th>email</th>
-			 				<th>created_at</th>
-			 				<th>user_level</th>
-			 				<th>actions</th>
-		 				</tr>
-		 			</thead>
-		 			<tbody>
-<?php 					foreach ($users as $user)
-						{
-							echo '<tr>';
-				 				echo '<td>'.$user['id'].'</td>';
-				 				echo '<td><a href="/users/show_wall/'.$user['id'].'"><u>'.$user['first_name'].' '.$user['last_name'].'</u></a></td>';
-				 				echo '<td>'.$user['email'].'</td>';
-				 				echo '<td>'.date('F jS Y',strtotime($user['created_at'])).'</td>';
-				 				echo '<td>'.$user['access_level'].'</td>';
-				 				echo '<td>
-			 					<div class="row">';
-                      			echo	'<div class="col-xs-8 col-sm-6"><a href="/users/edit_user"><u>edit</u></a></div>';
-                      				echo '<div class="col-xs-4 col-sm-6"><a href="/users/remove_user"><u>remove</u></a></div>';
-                				echo '</div>
-                      		</td>';
-                 			echo '</tr>';
-
-						}
-?>
-		 			</tbody>
-				</table>
-			</div>
+       <!-- ************* Main Content *************  -->
+       	<div class="row">
+		  <div class="col-md-3">
+		  		<h4>Add a new user</h3>
+				<form>
+		                <div class="form-group">
+		                  <label for="email">Email address</label>
+		                  <input type="email" class="form-control" id="email" placeholder="Enter email">
+		                </div>
+		                <div class="form-group">
+		                  <label for="fName">First Name</label>
+		                  <input type="text" class="form-control" id="fName" placeholder="Enter first name">
+		                </div>
+		                 <div class="form-group">
+		                  <label for="lName">Last Name</label>
+		                  <input type="text" class="form-control" id="lName" placeholder="Enter last name">
+		                </div>
+		                <div class="form-group">
+		                  <label for="exampleInputPassword1">Password</label>
+		                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+		                </div>
+		                <div class="form-group">
+		                  <label for="confirmPassword">Confirm Password</label>
+		                  <input type="password" class="form-control" id="confirmPassword" placeholder="Password">
+		                </div>
+		                <div class="row">
+                                  <div class="col-xs-8 col-sm-8"></div>
+                                  <div class="col-xs-4 col-sm-4">
+                                     <button type="submit" class="btn btn-success btn-default">Create</button>
+                                  </div>
+                        </div>   
+		        </form>
+		  </div>
+		  <div class="col-md-7"></div>
+		  <div class="col-md-2">
+		  		<p><button type="button" class="btn btn-primary btn-s">Return to Dashboard</button></p>
+		  </div>
 		</div>
 	</div>
   </body>

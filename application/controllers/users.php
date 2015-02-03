@@ -12,7 +12,20 @@ class Users extends CI_Controller {
 		// var_dump($users);
 	}
 
+	public function add_user()
+	{
+		$this->load->view('new_user');
+	}
 
+	public function edit_user()
+	{
+		$this->load->view('edit_user');
+	}
+
+	public function remove_user()
+	{
+		echo'in remove user';
+	}
 	public function edit_profile()
 	{
 		$data['user'] =$this->Blogger->get_user_by_id($this->session->userdata('user'));
