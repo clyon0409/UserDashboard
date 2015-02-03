@@ -23,7 +23,7 @@
   </head>
   <body>
 
-<?php var_dump($user) ?>
+<?php // var_dump($user) ?>
     <div class="container">
 
       <!-- ************* Naviation Bar *************  -->
@@ -41,8 +41,8 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                   <ul class="nav navbar-nav">
-                    <li><a href="/main/go_to_dashboard">Dashboard</a></li>
-                    <li><a href="/main/edit_profile">Profile</a></li>
+                    <li><a href="/users/go_to_dashboard">Dashboard</a></li>
+                    <li><a href="/users/edit_profile">Profile</a></li>
                   </ul>
                   <ul class="nav navbar-nav navbar-right">
                     <li><a href="main/index">Log off</a></li>
@@ -62,7 +62,7 @@
               </div>
               <div class="col-md-7"></div>
               <div class="col-md-2">
-                <p><a role="button" class="btn btn-primary btn-sm" href="/users/return_to_dashboard">Return to Dashboard</a></p>
+                <p><a role="button" class="btn btn-primary btn-sm" href="/users/go_to_dashboard">Return to Dashboard</a></p>
               </div>
         </div>
         <div class="row">

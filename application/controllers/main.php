@@ -26,22 +26,7 @@ class Main extends CI_Controller {
 		redirect(base_url());
 	}
 
-	public function edit_profile()
-	{
-		$data['user'] =$this->Blogger->get_user_by_id($this->session->userdata('user'));
-	
-		$this->load->view('edit_profile', $data);
-	}
 
-	public function go_to_dashboard()
-	{
-		if($this->session->userdata('access_level') == 'admin'){
-			$this->load->view('admin_dashboard');
-		}else{
-			echo'go to user dashboard';
-		}
-
-	}
 
 	public function login_or_register()
 	{

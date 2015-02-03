@@ -3,7 +3,8 @@
 class Blogger extends CI_Model {
 	function get_all_users()
 	{
-	return $this->db->query("SELECT * FROM users")->result_array();
+		$query = 'SELECT users.*, access.* FROM users JOIN access ON access.users_id = users.id';
+		return $this->db->query($query)->result_array();
 	}
 
 	function get_user_by_email($email)
