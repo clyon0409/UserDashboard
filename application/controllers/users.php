@@ -46,6 +46,24 @@ class Users extends CI_Controller {
 		}
 
 	}
+
+	public function post_comment()
+	{
+		// var_dump($this->input->post()); die();
+		$data=array('post_id'=>$this->input->post('post_id'),'comment'=>$this->input->post('comment'));
+		$result= $this->Blogger->insert_comment($data);
+		if ($result)
+		{
+			$data['user']=$this->Blogger->get_all_data_for_a_user($this->input->post('user'));
+			$this->load->view('user_information', $data);
+		}
+		else
+		{
+			$this->session->set_flashdata('errors','Unable to put your post on user wall');
+			redirect('/main/user_information');
+		}
+	}
+
 	public function update_user_info()
 	{
 		//var_dump($this->input->post());
@@ -157,11 +175,9 @@ class Users extends CI_Controller {
 	public function show_wall($user_id)
 	{
 		
-		$data['user']=$this->Blogger->get_user_by_id($user_id);
-		$data['user']['registered_at'] = $data['user']['created_at'];
-		
-		$data['user']['posts'] = $this->Blogger->get_all_data_for_a_blog($data['user']['blogs_id']);
-
+		$data['user']=$this->Blogger->get_user_by_id($user_id);	
+		//$data['user']['posts'] = $this->Blogger->get_all_data_for_a_blog($data['user']['blogs_id']);
+		$data['user'] = $this->Blogger->get_all_data_for_a_user($data['user']['blogs_id']);
 		//to do: handle comments
 		//var_dump($data); die();
 

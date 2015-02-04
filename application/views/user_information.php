@@ -108,57 +108,39 @@
                   echo '<div class="col-md-2"><p class="blog-post-meta"><p>'.date('F jS Y', strtotime($post['post_date'])).'</p></div>';
              echo '</div>';
              echo '<p>'.$post['content'].'</p>';
+             if (!empty($user['comments']))
+             {
+                 foreach ($user['comments'] as $comment)
+                {
+                  if($comment['posts_id'] == $post['post_id'])
+                  {
+                    echo '<div class="row">';
+                        echo '<div class="col-md-1"><h4></div>';
+                        echo '<div class="col-md-2"><h4><a href="#">'.$comment['first_name'].' '.$comment['last_name'].'</a> wrote</h4></div>';
+                        echo '<div class="col-md-7"></div>';
+                        echo '<div class="col-md-2"><p class="blog-post-meta">'.date('F jS Y', strtotime($comment['created_at'])).'</p></div>';
+                    echo '</div>';
+                    echo '<div class="row">';
+                        echo '<div class="col-md-1"></div>';
+                        echo '<div class="col-md-11"> <p>'.$comment['content'].'</p>></div>';
+                   echo '</div>';
+                  }
+                }
+            }
+            echo '<form action="/users/post_comment" method="post">
+                  <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11"> <textarea class="form-control" rows="3" name="comment" placeholder ="leave a message"></textarea></div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-11"></div>
+                    <div class="col-md-1"><p><button class="btn btn-success  btn-sm" type="submit" name="action" value="comment">Post</button></p></div>';
+                    echo '<input type="hidden" name="user" value="'.$user['id'].'">';
+                    echo '<input type="hidden" name="post_id" value="'.$post['post_id'].'">';
+                 echo '</div>
+                 </form>';
         }
 ?>
-            <hr>
-            
-            <div class="row">
-                <div class="col-md-1"><h4></div>
-                <div class="col-md-2"><h4><a href="#">Diana Manulu</a> wrote</h4></div>
-                <div class="col-md-7"></div>
-                <div class="col-md-2"><p class="blog-post-meta">January 1, 2014 by</p></div>
-            </div>
-            <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-11"> <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>></div>
-            </div>
-            <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-11"> <textarea class="form-control" rows="3" placeholder ='leave a message'></textarea></div>
-            </div>
-             <div class="row">
-                <div class="col-md-11"></div>
-                <div class="col-md-1"><p><button type="button" class="btn btn-success  btn-sm">Post</button></p></div>
-            </div>
-          </div> <!-- end of first blog post -->
-           
-          <div class="blog-post">
-            <div class="row">
-                <div class="col-md-2"><h4 class="blog-post-meta"><a href="#">Mark</a></h4></div>
-                <div class="col-md-8"></div>
-                <div class="col-md-2"><p class="blog-post-meta">January 1, 2014 by</p></div>
-            </div>
-            <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>
-            <hr>
-            
-            <div class="row">
-                <div class="col-md-1"><h4></div>
-                <div class="col-md-2"><h4><a href="#">Diana Manulu</a> wrote</h4></div>
-                <div class="col-md-7"></div>
-                <div class="col-md-2"><p class="blog-post-meta">January 1, 2014 by</p></div>
-            </div>
-            <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-11"> <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>></div>
-            </div>
-            <div class="row">
-                <div class="col-md-1"></div>
-                <div class="col-md-11"> <textarea class="form-control" rows="3" placeholder ='leave a message'></textarea></div>
-            </div>
-             <div class="row">
-                <div class="col-md-11"></div>
-                <div class="col-md-1"><p><button type="button" class="btn btn-success  btn-sm">Post</button></p></div>
-            </div>
           </div> <!-- end of first blog post --> 
 	</div>
   </body>

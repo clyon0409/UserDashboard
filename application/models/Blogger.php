@@ -43,22 +43,24 @@ class Blogger extends CI_Model {
 		return $this->db->query($query, array($blog_id))->result_array();
 	}
 
-	function get_all_data_for_a_post($post_id)
+	function get_all_data_for_a_post($blog_id)
 	{
 		//var_dump($post_id);
-		$query = 'SELECT comments.posts_id, users.first_name as comment_first, comments.content, users.last_name as comment_last, comments.created_at as comment_date
-				  FROM users
-				  JOIN comments on comments.users_id=users.id
-				  WHERE posts_id=?';
+		$query = 'SELECT commentors.first_name, commentors.last_name, comments.created_at, comments.content, posts.id as posts_id, posts.blogs_id from comments
+				  JOIN posts on posts.id=comments.posts_id
+				  JOIN users as commentors on commentors.id=comments.users_id
+				  WHERE blogs_id=?';
 
-				  return $this->db->query($query, array($post_id))->result_array();
+				  return $this->db->query($query, array($blog_id))->result_array();
 	}
 
 	function get_all_data_for_a_user($user_id)
 	{	
 		$data= $this->get_user_by_id($user_id);
-		//var_dump($data);
+		
 		$data['posts'] = $this->get_all_data_for_a_blog($data['blogs_id']);
+		$data['comments'] = $this->get_all_data_for_a_post($data['blogs_id']);
+		//var_dump($data['comments']);
 		return $data;
 
 	}
@@ -90,6 +92,13 @@ class Blogger extends CI_Model {
 		return $this->db->query($query, $values);
 	}
 
+	function insert_comment($data){
+		//$info=$this->get_user_by_id($data['id']);
+		// var_dump($data); die();
+		$query = 'INSERT INTO comments (users_id, posts_id, content, created_at, modified_at) VALUES (?,?,?,?,?)';
+		$values = array($this->session->userdata('user'), $data['post_id'], $data['comment'],date("Y-m-d, H:i:s"),date("Y-m-d, H:i:s")) ;
+		return $this->db->query($query, $values);
+	}
 	function update_description($data)
 	{
 		$update = array('description' => $data['description']);
