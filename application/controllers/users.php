@@ -17,14 +17,17 @@ class Users extends CI_Controller {
 		$this->load->view('new_user');
 	}
 
-	public function edit_user()
+	public function edit_user($user_id)
 	{
-		$this->load->view('edit_user');
+		$data['user']=$this->Blogger->get_user_by_id($user_id);		
+		$this->load->view('edit_user', $data);
 	}
 
-	public function remove_user()
+	public function remove_user($user_id)
 	{
-		echo'in remove user';
+		$this->Blogger->delete_user($user_id);
+		redirect('/users/go_to_dashboard');
+
 	}
 	public function edit_profile()
 	{
@@ -52,9 +55,16 @@ class Users extends CI_Controller {
 			if($this->form_validation->run() == FALSE)
 			{
 				$this->session->set_flashdata('errors',validation_errors());
-				redirect('/main/edit_profile');
+				if($this->input->post('page') == 'edit_user')
+				{  
+					$str='/users/edit_user/'.$this->input->post('user');
+					echo $str.'<br>';
+					redirect($str);
+				 }
+				else
+				{ redirect('/users/edit_profile'); }
 			}
-			$this->Blogger->update_field('users', 'first_name', $this->input->post('first_name'));
+			$this->Blogger->update_field('users', 'first_name', $this->input->post('first_name'), $user_id);
 			$msg='<p>You have successfully update your first name</p>';
 		}
 
@@ -65,31 +75,53 @@ class Users extends CI_Controller {
 			if($this->form_validation->run() == FALSE)
 			{
 				$this->session->set_flashdata('errors',validation_errors());
-				redirect('/main/edit_profile');
+				if($this->input->post('page') == 'edit_user')
+				{  redirect('/users/edit_user/'.$this->input->post('user')); }
+				else
+				{ redirect('/users/edit_profile'); }
 			}
-			$this->Blogger->update_field('users', 'last_name', $this->input->post('last_name'));
+			$this->Blogger->update_field('users', 'last_name', $this->input->post('last_name'),$user_id);
 			$msg=$msg.'<p>You have successfully update your last name<p>';
 		}
 		
 
 		if(!empty($this->input->post('email')))
 		{
+
+			if($this->input->post('page') == 'edit_user')
+				$user_id=$this->input->post('user');
+			else
+				$user_id=$this->session->userdata('user');
+
 			$this->form_validation->set_rules('email', 'email','trim|valid_email');
 			if($this->form_validation->run() == FALSE)
 			{
 				$this->session->set_flashdata('errors',validation_errors());
-				redirect('/main/edit_profile');
+				if($this->input->post('page') == 'edit_user')
+				{  redirect('/users/edit_user/'.$this->input->post('user')); }
+				else
+				{ redirect('/users/edit_profile'); }
 			}
-			$this->Blogger->update_field('users', 'email', $this->input->post('email'));
+			$this->Blogger->update_field('users', 'email', $this->input->post('email'), $user_id);
 			$msg=$msg.'<p>You have successfully update your email</p>';
 		}
 		
+		if(!empty($this->input->post('access_level')))
+		{
+			$this->Blogger->update_access_level($this->input->post('user'), $this->input->post('access_level'));
+		}
+
 		if (!empty($msg))
 		{
 			$this->session->set_flashdata('errors',$msg);
+			$msg=$msg.'<p>You have successfully updates the access level</p>';
 		}
-		redirect('/main/edit_profile');
-	}
+
+		if($this->input->post('page') == 'edit_user')
+		{  redirect('/users/edit_user/'.$this->input->post('user')); }
+		else
+		{ redirect('/users/edit_profile'); }
+}
 
 	public function update_description()
 	{
@@ -107,12 +139,19 @@ class Users extends CI_Controller {
 		if($this->form_validation->run() == FALSE)
 		{
 				$this->session->set_flashdata('errors',validation_errors());
-				redirect('/main/edit_profile');
+				if($this->input->post('page') == 'edit_user')
+					redirect('/users/edit_user/'.$this->input->post('user'));
+				else
+					redirect('/users/edit_profile');
 		}
 
 		$this->Blogger->update_password($this->input->post());
 		$this->session->set_flashdata('errors','You have successfully updated your password');
-		redirect('/main/edit_profile');
+
+		if($this->input->post('page') == 'edit_user')
+			redirect('/users/edit_user/'.$this->input->post('user'));
+		else
+			redirect('/users/edit_profile');
 	}
 
 	public function show_wall($user_id)

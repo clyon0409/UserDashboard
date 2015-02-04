@@ -86,8 +86,8 @@
 				 				echo '<td>'.$user['access_level'].'</td>';
 				 				echo '<td>
 			 					<div class="row">';
-                      			echo	'<div class="col-xs-8 col-sm-6"><a href="/users/edit_user"><u>edit</u></a></div>';
-                      				echo '<div class="col-xs-4 col-sm-6"><a href="/users/remove_user"><u>remove</u></a></div>';
+                      			echo	'<div class="col-xs-8 col-sm-6"><a href="/users/edit_user/'.$user['id'].'"><u>edit</u></a></div>';
+                      				echo '<div class="col-xs-4 col-sm-6"><a href="/users/remove_user/'.$user['id'].'"<u>remove</u></a></div>';
                 				echo '</div>
                       		</td>';
                  			echo '</tr>';

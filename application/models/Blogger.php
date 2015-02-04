@@ -9,19 +9,19 @@ class Blogger extends CI_Model {
 
 	function get_user_by_email($email)
 	{
-		$query = 'SELECT users.*, access.* FROM users JOIN access ON access.users_id = users.id WHERE email = ?';
+		$query = 'SELECT users.*, users.created_at as registered_at, access.* FROM users JOIN access ON access.users_id = users.id WHERE email = ?';
 		return $this->db->query($query, array($email))->row_array();
 	}
 
 	function get_user_id($email)
 	{
-		$query = 'SELECT * FROM users WHERE email = ?';
+		$query = 'SELECT * , users.created_at as registered_at FROM users WHERE email = ?';
 		return $this->db->query($query, array($email))->row_array();
 	}
 
 	function get_user_by_id($id)
 	{
-		$query = 'SELECT users.*, access.* FROM users JOIN access ON access.users_id = users.id WHERE users.id = ?';
+		$query = 'SELECT users.*, users.created_at as registered_at, access.* FROM users JOIN access ON access.users_id = users.id WHERE users.id = ?';
 		return $this->db->query($query, array($id))->row_array();
 	}
 
@@ -37,7 +37,8 @@ class Blogger extends CI_Model {
 		$query = 'SELECT posts.id as post_id, users.first_name as poster_first, users.last_name as poster_last, posts.content, posts.created_at as post_date
 				  FROM users
 				  JOIN posts on posts.users_id=users.id
-				  WHERE blogs_id = ?';
+				  WHERE blogs_id = ?
+				  ORDER BY post_date DESC';
 
 		return $this->db->query($query, array($blog_id))->result_array();
 	}
@@ -53,22 +54,11 @@ class Blogger extends CI_Model {
 				  return $this->db->query($query, array($post_id))->result_array();
 	}
 
-	function get_all_data_for_a_user()
-	{
-		$user = $this->get_user_by_id($this->session->userdata('user'));
-
-		
-		$data=array('id'=>$user['id'], 
-					'first_name'=>$user['first_name'],
-					'access_level' =>$user['access_level'],
-					'blog_id' =>$user['blogs_id'],
-					'last_name'=>$user['last_name'],
-					'email'=>$user['email'],
-					'description' => $user['description'],
-					'registered_at' => $user['created_at']);
-
- 		// var_dump($data);die();
-		$data['posts'] = $this->get_all_data_for_a_blog($user['blogs_id']);
+	function get_all_data_for_a_user($user_id)
+	{	
+		$data= $this->get_user_by_id($user_id);
+		//var_dump($data);
+		$data['posts'] = $this->get_all_data_for_a_blog($data['blogs_id']);
 		return $data;
 
 	}
@@ -94,10 +84,9 @@ class Blogger extends CI_Model {
 	}
 
 	function insert_post($data){
-		echo 'got into insert post';
-		var_dump($data);
+		$info=$this->get_user_by_id($data['id']);
 		$query = 'INSERT INTO posts (users_id, blogs_id, content, created_at, modified_at) VALUES (?,?,?,?,?)';
-		$values = array($this->session->userdata('user'), $this->session->userdata('blog_id'), $data['post'],date("Y-m-d, H:i:s"),date("Y-m-d, H:i:s")) ;
+		$values = array($this->session->userdata('user'), $info['blogs_id'], $data['post'],date("Y-m-d, H:i:s"),date("Y-m-d, H:i:s")) ;
 		return $this->db->query($query, $values);
 	}
 
@@ -115,15 +104,25 @@ class Blogger extends CI_Model {
 		$this->db->update('users', $update); 
 	}
 
-	function update_field($table, $key, $data)
+	function update_field($table, $key, $data, $user_id)
 	{
 		$update = array($key => $data);
-		$this->db->where('id', $this->session->userdata('user'));
+		$this->db->where('id', $user_id);
 		$this->db->update($table, $update); 
 	}
 
-	function delete_course($id)
+	function update_access_level($user_id, $data)
 	{
-		$this->db->delete('courses',array('id'=>$id));
+		$update = array('access_level' => $data);
+		$this->db->where('users_id', $user_id);
+		$this->db->update('access', $update); 
+	}
+
+	function delete_user($id)
+	{
+		$data = $this->get_user_by_id($id);
+		$this->db->delete('access',array('blogs_id'=>$data['blogs_id']));
+		$this->db->delete('blogs',array('id'=>$data['blogs_id']));
+		$this->db->delete('users',array('id'=>$data['id']));
 	}
 }

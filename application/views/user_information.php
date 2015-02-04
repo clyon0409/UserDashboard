@@ -95,6 +95,7 @@
     				  <div class="col-md-11"></div>
     				  <div class="col-md-1">
     				  	<p><button type='submit' class="btn btn-success  btn-default" name='action' value='add-post'>Post</button></p>
+                <input type='hidden' name='user' value="<?= $user['id'] ?>">
     				  </div>
           </div>
       </form>

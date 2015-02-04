@@ -7,6 +7,8 @@ class Main extends CI_Controller {
 		parent::__construct();
 		$this->output->enable_profiler();
 		$this->load->model('Blogger');
+		$this->load->library('form_validation');
+
 		// $users = $this->Blogger->get_all_users();
 		// var_dump($users);
 	}
@@ -30,7 +32,8 @@ class Main extends CI_Controller {
 
 	public function login_or_register()
 	{
-		$this->load->library('form_validation');
+		
+		//echo 'got into login and registration';
 
 		if($this->input->post('action') == 'login')
 		{ 
@@ -76,7 +79,12 @@ class Main extends CI_Controller {
 				//echo 'form validation returned false';
 				//var_dump(validation_errors());die();
 				$this->session->set_flashdata('errors',validation_errors());
-				redirect('/main/register');
+				if ($this->input->post('page') == 'new_user')
+				{
+					redirect ('/users/add_user');
+				}else{
+					redirect('/main/register');
+				}
 			}
 			else
 			{
@@ -92,7 +100,12 @@ class Main extends CI_Controller {
 					$new_user = $this->Blogger->get_user_id($user['email']);
 				}else{
 					$this->session->set_flashdata('errors', 'Unable to add new user');
-					redirect('/main/register');
+					if ($this->input->post('page') == 'new_user')
+					{
+						redirect ('/users/add_user');
+					}else{
+						redirect('/main/register');
+					}
 				}
 
 				$blog = $this->Blogger->create_blog();
@@ -103,24 +116,33 @@ class Main extends CI_Controller {
 					if (!$res)
 					{
 						$this->session->set_flashdata('errors', 'Unable to connect blog to user');
-						redirect('/main/register');
+						if ($this->input->post('page') == 'new_user')
+						{
+							redirect ('/users/go_to_dashboard');
+						}else{
+							redirect('/main/register');
+						}
 					}
 
 				}
 
 				$new_user['access_level'] = 'normal';
 				$new_user['blogs_id'] = $blog['id'];
-				$this->save_user_info_redirect($new_user);
+				if ($this->input->post('page') == 'new_user')
+					redirect ('/users/add_user');
+				else
+					$this->save_user_info_redirect($new_user);
 			}
 		}
 	}
 
 	public function put_post()
 	{
-		$result= $this->Blogger->insert_post($this->input->post());
+		$data=array('id'=>$this->input->post('user'),'post'=>$this->input->post('post'));
+		$result= $this->Blogger->insert_post($data);
 		if ($result)
 		{
-			$data['user']=$this->Blogger->get_all_data_for_a_user();
+			$data['user']=$this->Blogger->get_all_data_for_a_user($this->input->post('user'));
 			$this->load->view('user_information', $data);
 		}
 		else
